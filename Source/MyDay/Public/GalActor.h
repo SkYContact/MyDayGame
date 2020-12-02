@@ -2,20 +2,28 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "PaperSpriteComponent.h"
-#include "GalDefine.h"
+#include "GalActorBase.h"
 #include "GalActor.generated.h"
 
+UENUM(BlueprintType)
+enum class EGalEmotion : uint8
+{
+	ENormal,
+	EHappy,
+	ESad,
+	EAngry,
+	ESuprise,
+	EFear,
+	ELisk,
+	EDisLike,
+};
+
 UCLASS()
-class MYDAY_API AGalActor : public AActor
+class MYDAY_API AGalActor : public AGalActorBase
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
-	AGalActor();
 
 	virtual void BeginPlay() override;
 
@@ -24,9 +32,6 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	EGalEmotion GalEmotion;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	UPaperSpriteComponent* PaperSpriteComponent;
 
 private:
 	bool RefreshSprite();

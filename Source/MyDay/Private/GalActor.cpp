@@ -3,12 +3,6 @@
 
 #include "GalActor.h"
 
-// Sets default values
-AGalActor::AGalActor()
-{
-	PaperSpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("GalCharacterSprite"));
-}
-
 void AGalActor::BeginPlay()
 {
 	RefreshSprite();

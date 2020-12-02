@@ -1,14 +1,27 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Sound/AmbientSound.h"
 #include "GalGameModeBase.h"
+#include "Sound/AmbientSound.h"
 
 void AGalGameModeBase::BeginPlay()
 {
-	PlayerController = GetWorld()->GetFirstPlayerController();
-	PlayerController->bShowMouseCursor = true;
 	BGMAmbientSound = GetWorld()->SpawnActor<AAmbientSound>();
 	SoundAmbientSound = GetWorld()->SpawnActor<AAmbientSound>();
+	BGActor = GetWorld()->SpawnActor<AGalActorBase>(BGActorBase);
+	if (BGActor)
+	{
+		BGActor->SetActorLocation(FVector(0, BGDepth, 0));
+	}
 	Super::BeginPlay();
+	PlayerController = GetWorld()->GetFirstPlayerController();
+	if (PlayerController)
+	{
+		PlayerController->bShowMouseCursor = true;
+	}
+	UUserWidget* MainUserWidget = CreateWidget<UUserWidget>(GetWorld(), MainUI);
+	if (MainUserWidget)
+	{
+		MainUserWidget->AddToViewport();
+	}
 }
