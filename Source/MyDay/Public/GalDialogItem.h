@@ -33,5 +33,5 @@ public:
 	TSubclassOf<UGalPerson> GalPerson;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString DialogString;
+	FText DialogString;
 };
