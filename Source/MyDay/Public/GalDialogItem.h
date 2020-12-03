@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DataTable.h"
 #include "GalDialogItem.generated.h"
 
 class UPaperSprite;
@@ -23,10 +24,10 @@ public:
 	UPaperSprite* ProfileSprite;
 };
 
-UCLASS(Blueprintable, BlueprintType)
-class MYDAY_API UGalDialogItem : public UObject
+USTRUCT()
+struct FGalDialogItemRow : public FTableRowBase
 {
-	GENERATED_BODY()
+	GENERATED_USTRUCT_BODY()
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
