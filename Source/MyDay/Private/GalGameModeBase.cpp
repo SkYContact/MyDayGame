@@ -2,12 +2,14 @@
 
 
 #include "GalGameModeBase.h"
+#include "DSP/VolumeFader.h"
+#include "AudioDevice.h"
+#include "ActiveSound.h"
+#include "Components/AudioComponent.h"
 #include "Sound/AmbientSound.h"
 
 void AGalGameModeBase::BeginPlay()
 {
-	BGMAmbientSound = GetWorld()->SpawnActor<AAmbientSound>();
-	SoundAmbientSound = GetWorld()->SpawnActor<AAmbientSound>();
 	BGActor = GetWorld()->SpawnActor<AGalActorBase>(BGActorBase);
 	if (BGActor)
 	{
@@ -24,4 +26,24 @@ void AGalGameModeBase::BeginPlay()
 	{
 		MainUserWidget->AddToViewport();
 	}
+}
+
+void AGalGameModeBase::PlayBGM(USoundWave* BGMSound)
+{
+	UWorld* World = GetWorld();
+	FAudioDevice* AudioDevice = World->GetAudioDeviceRaw();
+	if (!AudioDevice)
+	{
+		return;
+	}
+	FActiveSound NewActiveSound;
+	NewActiveSound.SetSound(BGMSound);
+	NewActiveSound.SetWorld(World);
+	NewActiveSound.bIsUISound = true;
+	NewActiveSound.bAllowSpatialization = false;
+	NewActiveSound.SetOwner(this);
+	Audio::FVolumeFader& Fader = NewActiveSound.ComponentVolumeFader;
+	Fader.SetVolume(0.0f); // Init to 0.0f to fade as default is 1.0f
+ 	Fader.StartFade(1.0f, 1.0f, Audio::EFaderCurve::Linear);
+	AudioDevice->AddNewActiveSound(NewActiveSound);
 }

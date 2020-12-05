@@ -9,6 +9,8 @@
 #include "GalGameModeBase.generated.h"
 
 class AAmbientSound;
+class USoundWave;
+struct FActiveSound;
 /**
  * 
  */
@@ -20,14 +22,11 @@ class MYDAY_API AGalGameModeBase : public AGameMode
 	virtual void BeginPlay() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void PlayBGM(USoundWave* BGMSound);
+
 	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
-
-	UPROPERTY(BlueprintReadOnly)
-	AAmbientSound* BGMAmbientSound;
-
-	UPROPERTY(BlueprintReadOnly)
-	AAmbientSound* SoundAmbientSound;
 
 	UPROPERTY(BlueprintReadOnly)
 	AGalActorBase* BGActor;

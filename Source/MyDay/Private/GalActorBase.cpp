@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PaperSpriteComponent.h"
 #include "GalActorBase.h"
+#include "PaperSpriteComponent.h"
 
 AGalActorBase::AGalActorBase(const FObjectInitializer& ObjectInitializer)
 {
