@@ -2,48 +2,57 @@
 
 
 #include "GalGameModeBase.h"
-#include "DSP/VolumeFader.h"
-#include "AudioDevice.h"
-#include "ActiveSound.h"
 #include "Components/AudioComponent.h"
 #include "Sound/AmbientSound.h"
 
 void AGalGameModeBase::BeginPlay()
 {
 	BGActor = GetWorld()->SpawnActor<AGalActorBase>(BGActorBase);
-	if (BGActor)
+	if (BGActor != nullptr)
 	{
 		BGActor->SetActorLocation(FVector(0, BGDepth, 0));
 	}
+	AmbientSound_One = GetWorld()->SpawnActor<AAmbientSound>();
+	AmbientSound_Two = GetWorld()->SpawnActor<AAmbientSound>();
+	ActiveAmbientSound = nullptr;
 	Super::BeginPlay();
 	PlayerController = GetWorld()->GetFirstPlayerController();
-	if (PlayerController)
+	if (PlayerController != nullptr)
 	{
 		PlayerController->bShowMouseCursor = true;
 	}
 	UUserWidget* MainUserWidget = CreateWidget<UUserWidget>(GetWorld(), MainUI);
-	if (MainUserWidget)
+	if (MainUserWidget != nullptr)
 	{
 		MainUserWidget->AddToViewport();
 	}
 }
 
-void AGalGameModeBase::PlayBGM(USoundWave* BGMSound)
+void AGalGameModeBase::PlayBGM(USoundWave* BGMSound, float FadeDuration)
 {
-	UWorld* World = GetWorld();
-	FAudioDevice* AudioDevice = World->GetAudioDeviceRaw();
-	if (!AudioDevice)
+	if (BGMSound == nullptr)
 	{
 		return;
 	}
-	FActiveSound NewActiveSound;
-	NewActiveSound.SetSound(BGMSound);
-	NewActiveSound.SetWorld(World);
-	NewActiveSound.bIsUISound = true;
-	NewActiveSound.bAllowSpatialization = false;
-	NewActiveSound.SetOwner(this);
-	Audio::FVolumeFader& Fader = NewActiveSound.ComponentVolumeFader;
-	Fader.SetVolume(0.0f); // Init to 0.0f to fade as default is 1.0f
- 	Fader.StartFade(1.0f, 1.0f, Audio::EFaderCurve::Linear);
-	AudioDevice->AddNewActiveSound(NewActiveSound);
+	float FadeInDuration = 0.0f;
+	if (ActiveAmbientSound)
+	{
+		ActiveAmbientSound->FadeOut(FadeDuration, 0.0f);
+		FadeInDuration = FadeDuration;
+	}
+	if (ActiveAmbientSound == AmbientSound_One)
+	{
+		ActiveAmbientSound = AmbientSound_Two;
+	}
+	else
+	{
+		ActiveAmbientSound = AmbientSound_One;
+	}
+	BGMSound->bLooping = true;
+	UAudioComponent* AudioComponent = ActiveAmbientSound->GetAudioComponent();
+	if (AudioComponent != nullptr)
+	{
+		AudioComponent->SetSound(BGMSound);
+	}
+	ActiveAmbientSound->FadeIn(FadeDuration, 1.0f);
 }

@@ -9,8 +9,6 @@
 #include "GalGameModeBase.generated.h"
 
 class AAmbientSound;
-class USoundWave;
-struct FActiveSound;
 /**
  * 
  */
@@ -23,7 +21,7 @@ class MYDAY_API AGalGameModeBase : public AGameMode
 
 public:
 	UFUNCTION(BlueprintCallable)
-	void PlayBGM(USoundWave* BGMSound);
+	void PlayBGM(USoundWave* BGMSound, float FadeDuration = 0.2f);
 
 	UPROPERTY(BlueprintReadOnly)
 	APlayerController* PlayerController;
@@ -39,4 +37,13 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnyWhere)
 	float BGDepth = -100;
+
+	UPROPERTY(BlueprintReadOnly)
+	AAmbientSound* AmbientSound_One;
+
+	UPROPERTY(BlueprintReadOnly)
+	AAmbientSound* AmbientSound_Two;
+
+	UPROPERTY(BlueprintReadOnly)
+	AAmbientSound* ActiveAmbientSound;
 };
